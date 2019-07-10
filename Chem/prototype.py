@@ -3,6 +3,7 @@
 # Author: Eunhak Lee(@return0927)
 #
 from .status import Status
+from typing import List
 
 
 class Atom:
@@ -24,6 +25,6 @@ class Compound:
     def __str__(self):
         return repr(self)
 
-    def __init__(self, atoms, status: Status = Status()):
+    def __init__(self, atoms: List[Atom], status: Status = Status()):
         self.atoms = atoms
         self.status = status
