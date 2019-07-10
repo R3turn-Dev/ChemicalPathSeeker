@@ -1,0 +1,12 @@
+# Exclude IDE files
+.idea
+
+# Exclude testing environments
+.lnenv
+.venv
+venv
+
+# Exclude database
+*.db
+*.sql
+*.json
