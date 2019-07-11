@@ -113,3 +113,4 @@ TABLE = {
     110: Ds,
 }
 
+NAME2NUM = {(v, k) for k, v in TABLE.items()}
