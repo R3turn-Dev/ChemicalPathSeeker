@@ -3,19 +3,27 @@
 # Author: Eunhak Lee(@return0927)
 #
 from .status import Status
+from .periodictable import NUM2NAME, NUM2REPR
 from typing import List
 
 
 class Atom:
     def __repr__(self):
-        return f"""class <Atom({self.atomic_name}{self.atomic_number})>"""
+        return f"""class <Atom({self.atomic_repr}{self.atomic_number})>"""
 
     def __str__(self):
         return repr(self)
 
     def __init__(self, no):
         self.atomic_number = no
-        self.atomic_name = ""
+
+    @property
+    def atomic_repr(self):
+        return NUM2NAME[self.atomic_number]
+
+    @property
+    def atomic_name(self):
+        return NUM2REPR[self.atomic_number]
 
 
 class Compound:
