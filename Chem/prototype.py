@@ -3,7 +3,7 @@
 # Author: Eunhak Lee(@return0927)
 #
 from .status import Status
-from .periodictable import NUM2NAME, NUM2REPR
+from .periodictable import TABLE
 from typing import List
 
 
@@ -19,16 +19,16 @@ class Atom:
 
     @property
     def atomic_repr(self):
-        return NUM2NAME[self.atomic_number]
+        return repr(TABLE[self.atomic_number])
 
     @property
     def atomic_name(self):
-        return NUM2REPR[self.atomic_number]
+        return TABLE[self.atomic_number].atomic_name
 
 
 class Compound:
     def __repr__(self):
-        return f"""class <Compound({", ".join(self.atoms)})>"""
+        return f"""class <Compound({", ".join([repr(x) for x in self.atoms])})>"""
 
     def __str__(self):
         return repr(self)
