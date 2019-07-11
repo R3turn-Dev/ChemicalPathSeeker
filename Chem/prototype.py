@@ -43,11 +43,11 @@ class Atom(Element):
 
 class Compound:
     def __repr__(self):
-        return f"""class <Compound({", ".join([repr(x) for x in self.atoms])})>"""
+        return f"""class <Compound({", ".join(self.atoms)})>"""
 
     def __str__(self):
         return repr(self)
 
     def __init__(self, atoms: List[Atom], status: Status = Status()):
-        self.atoms = atoms
+        self.atoms = [*atoms]
         self.status = status
