@@ -1,2 +1,5 @@
-CH3COOH
-CH3COOH(g)
+C(s)
+2H2(g)
+CH4(g)
+C(s) + 2H2(g) -> CH4(g)
+C(s. 흑연) + 2H2(g) -> CH4(g)
