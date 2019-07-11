@@ -51,3 +51,12 @@ class Compound:
     def __init__(self, atoms: List[Atom], status: Status = Status()):
         self.atoms = [*atoms]
         self.status = status
+
+
+class Equation:
+    def __repr__(self):
+        return f"""class <Equation({" + ".join(self.before)} -> {" + ".join(self.after)})>"""
+
+    def __init__(self, before_compounds: List[Compound], after_compounds: List[Compound]):
+        self.before = [*before_compounds]
+        self.after = [*after_compounds]
