@@ -3,11 +3,12 @@
 # Author: Eunhak Lee(@return0927)
 #
 from .status import Status
+from .atoms import Element
 from .periodictable import TABLE
 from typing import List
 
 
-class Atom:
+class Atom(Element):
     def __repr__(self):
         return f"""class <Atom({self.atomic_repr}{self.atomic_number})>"""
 
@@ -15,7 +16,7 @@ class Atom:
         return repr(self)
 
     def __init__(self, no):
-        self.atomic_number = no
+        super().__init__(no)
 
     @property
     def atomic_repr(self):

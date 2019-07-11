@@ -5,14 +5,11 @@
 from .prototype import Atom
 
 
-class Element(Atom):
+class Element:
     atomic_number = 0
 
     def __repr__(self):
         return self.__class__.__name__
-
-    def __init__(self):
-        super().__init__(self.atomic_number)
 
 
 class H(Element):
