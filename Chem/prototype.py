@@ -4,7 +4,7 @@
 #
 from .status import Status
 from .atoms import Element
-from .periodictable import TABLE
+from .periodictable import TABLE, NAME2NUM
 from typing import List
 
 
@@ -35,6 +35,10 @@ class Atom(Element):
     @staticmethod
     def derive_from_atomic_number(num):
         return Atom(num)
+
+    @staticmethod
+    def derive_from_atomic_repr(string):
+        return Atom(NAME2NUM[string])
 
 
 class Compound:
