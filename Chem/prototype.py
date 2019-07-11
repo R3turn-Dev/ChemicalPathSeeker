@@ -20,7 +20,7 @@ class Atom(Element):
 
     @property
     def atomic_repr(self):
-        return repr(TABLE[self.atomic_number])
+        return repr(TABLE[self.atomic_number]())
 
     @property
     def atomic_name(self):
