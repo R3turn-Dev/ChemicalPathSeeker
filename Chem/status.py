@@ -7,8 +7,9 @@
 class Status:
     status = ""
 
-    def __init__(self, temp=273):
+    def __init__(self, meta: str = "", temp: float = 273):
         self.temperature = temp
+        self.meta = meta
 
 
 class Gas(Status):
