@@ -3,3 +3,5 @@ C(s)
 CH4(g)
 C(s) + 2H2(g) -> CH4(g)
 C(s, 흑연) + 2H2(g) -> CH4(g)
+C3H8(g) + 5O2(g) -> 3CO2(g) 4H2O(l), ΔH = -2220kJ
+CaCO3(s) -> CaO(s) + CO2(g), ΔH = 177.8kJ
