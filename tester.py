@@ -14,8 +14,8 @@ for case in cases:
     parser = Parser()
     try:
         print(f" > {case }")
-        data = parser.separate_compounds(case)
-        print(f" < {data}")
+        data = parser.run(case)
+        print(f" < {repr(data)}")
     except ParseError as ex:
         print(ex.data)
         traceback.print_exc()
