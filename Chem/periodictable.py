@@ -113,4 +113,4 @@ TABLE = {
     110: Ds,
 }
 
-NAME2NUM = {(v, k) for k, v in TABLE.items()}
+NAME2NUM = dict((v.__name__, k) for k, v in TABLE.items())
