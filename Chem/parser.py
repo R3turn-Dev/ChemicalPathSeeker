@@ -73,7 +73,7 @@ class Parser:
         """Convert () stripped string into status and meta information
 
         :param data: () stripped string
-        :return: parsed data as [Chem.status.Status, str]
+        :return: parsed data as Chem.status.Status
         """
         if not (data[0] == "(" and data[-1] == ")"):
             raise ParseError("Unexpected status string passed", data=data)
