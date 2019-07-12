@@ -45,9 +45,14 @@ class Parser:
             before = [x.strip() for x in before.split("+")]
             after = [x.strip() for x in after.split("+")]
 
+            before = [cls.parse_compound(compound) for compound in before]
+            after = [cls.parse_compound(compound) for compound in after]
+
+            return Equation(before_compounds=before, after_compounds=after)
+
         # Compounds mode
         else:
-            compounds = [x.split() for x in data.split("+")]
+            compounds = [x.strip() for x in data.split("+")]
             parsed_compounds = []
 
             for compound in compounds:
@@ -61,6 +66,8 @@ class Parser:
                                         )
                                     )
                     parsed_compounds.append(ex)
+
+            return parsed_compounds
 
     @classmethod
     def parse_compound(cls, data):
