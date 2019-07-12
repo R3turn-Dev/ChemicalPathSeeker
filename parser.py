@@ -5,6 +5,7 @@
 from Chem.status import *
 from Chem.prototype import Atom, Compound, Equation
 from traceback import format_exc
+from Chem.exception import ParseError
 
 
 class Parser:
@@ -59,8 +60,21 @@ class Parser:
             count = int(data[0])
             data = data[1:]
 
+        compound = data
+        status = "(g)"
         # If indicating status or sth else
-        if ("(" in data and ")" in data) and \
-                0 <= data.index("(") < data.index(")") < len(data):
-            compound, status = data[:data.index("(")], data[data.index("("):]
+        if ("(" in compound and ")" in compound) and \
+                0 <= compound.index("(") < compound.index(")") < len(compound):
+            compound, status = compound[:compound.index("(")], compound[compound.index("("):]
+
+    @staticmethod
+    def parse_status(data):
+        """Convert () stripped string into status and meta information
+
+        :param data: () stripped string
+        :return: parsed data as [Chem.status.Status, str]
+        """
+        if not (data[0] == "(" and data[-1] == ")"):
+            raise ParseError("Unexpected status string passed", data=data)
+
 
