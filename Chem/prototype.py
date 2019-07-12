@@ -43,15 +43,19 @@ class Atom(Element):
 
 class Compound:
     def __repr__(self):
-        return "class <Compound({}{}({}{}))>".format(
+        return f"class <Compound({self.chemical_formula}))>"
+
+    def __str__(self):
+        return repr(self)
+
+    @property
+    def chemical_formula(self):
+        return "{}{}({}{})".format(
             self.count if self.count > 1 else "",
             "".join([str(x) for x in self.atoms]),
             self.status.status,
             ", " + self.status.meta if self.status.meta else ""
             )
-
-    def __str__(self):
-        return repr(self)
 
     def __init__(self, atoms: List[Atom], count: int = 1, status: Status = Status()):
         self.count = count
@@ -61,7 +65,8 @@ class Compound:
 
 class Equation:
     def __repr__(self):
-        return f"""class <Equation({" + ".join(self.before)} -> {" + ".join(self.after)})>"""
+        return f"""class <Equation({" + ".join([x.chemical_formula for x in self.before])} -> """ + \
+               f"""{" + ".join([x.chemical_formula for x in self.after])})>"""
 
     def __init__(self, before_compounds: List[Compound], after_compounds: List[Compound]):
         self.before = [*before_compounds]
