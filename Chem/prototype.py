@@ -65,8 +65,18 @@ class Compound:
 
 class Equation:
     def __repr__(self):
-        return f"""class <Equation({" + ".join([x.chemical_formula for x in self.before])} -> """ + \
-               f"""{" + ".join([x.chemical_formula for x in self.after])})>"""
+        return f"""class {self.__class__.__name__}<{str(self)}>"""
+
+    def __str__(self):
+        return "{} -> {}".format(
+            " + ".join([x.chemical_formula for x in self.reactants]),
+            " + ".join([x.chemical_formula for x in self.products])
+            )
+
+    def __init__(self, reactants: List[Compound], products: List[Compound]):
+        self.reactants = [*reactants]
+        self.products = [*products]
+
 
 class ThermochemicalEquation(Equation):
     def __str__(self):
