@@ -41,6 +41,13 @@ class Parser:
         """
         # Equation mode
         if "->" in data:
+            enthalpy = False
+            # If has enthalpy data as ΔH
+            if ("," in data and "ΔH" in data) and \
+                    0 <= data.index(",") < data.index("ΔH") < len(data):
+                data, enthalpy = data[:data.index(",")], data[data.index(","):]
+                enthalpy = cls.parse_enthalpy(enthalpy)
+
             before, after = data.split("->")
             before = [x.strip() for x in before.split("+")]
             after = [x.strip() for x in after.split("+")]
@@ -48,7 +55,8 @@ class Parser:
             before = [cls.parse_compound(compound) for compound in before]
             after = [cls.parse_compound(compound) for compound in after]
 
-            return Equation(before_compounds=before, after_compounds=after)
+            return Equation(reactants=before, products=after) if not enthalpy else \
+                ThermochemicalEquation(reactants=before, products=after, enthalpy=enthalpy)
 
         # Compounds mode
         else:
@@ -68,6 +76,26 @@ class Parser:
                     parsed_compounds.append(ex)
 
             return parsed_compounds
+
+    @classmethod
+    def parse_enthalpy(cls, data):
+        original = data
+        # if prefix comma is not yet removed
+        if data.startswith(","):
+            data = data.replace(",", "").strip()
+
+        data = data.replace(" ", "")
+        data = data[data.index("ΔH=")+3:]
+
+        if any(unit in data[-2:].lower() for unit in ("j", "kj")):
+            if data[-2].upper() == "K":
+                if cls.isnumeric(data[:-2]):
+                    return float(data[:-2]) * 1e3
+            else:
+                if cls.isnumeric(data[:-1]):
+                    return float(data[:-2])
+
+        raise ParseError("Passed enthalpy data is not parsable", data=original)
 
     @classmethod
     def parse_compound(cls, data):
@@ -147,3 +175,11 @@ class Parser:
             temp=273 if temperature < 0 else temperature,
             meta=", ".join(metas)
             )
+
+    @staticmethod
+    def isnumeric(data):
+        try:
+            float(data)
+            return True
+        except:
+            return False
