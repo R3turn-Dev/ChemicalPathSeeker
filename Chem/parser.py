@@ -5,13 +5,15 @@
 from .status import *
 from .prototype import Atom, Compound, Equation
 from traceback import format_exc
-from .exception import ParseError
+from .exception import ChemException, ParseError
 
 
 class Parser:
     def __init__(self):
-        self.algorithm = []
         self.status = 0
+        self.algorithm = [
+            self.separate_compounds
+            ]
 
     def run(self, data):
         self.status = 1
@@ -21,13 +23,12 @@ class Parser:
                 data = func(data)
 
             self.status = 0
-        except:
+            return data
+
+        except ChemException as ex:
             self.status = -1
 
-            data = format_exc()
-
-        finally:
-            return data
+            return ex
 
     @staticmethod
     def separate_compounds(data):
