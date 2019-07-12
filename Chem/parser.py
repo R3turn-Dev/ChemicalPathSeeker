@@ -30,8 +30,8 @@ class Parser:
 
             return ex
 
-    @staticmethod
-    def separate_compounds(data):
+    @classmethod
+    def separate_compounds(cls, data):
         """
 
         :param data: string of compounds or an equation
@@ -47,8 +47,8 @@ class Parser:
         else:
             compounds = [x.split() for x in data.split("+")]
 
-    @staticmethod
-    def parse_compound(data):
+    @classmethod
+    def parse_compound(cls, data):
         """Convert compound string into compound class
 
         :param data: string of a compound
@@ -68,8 +68,8 @@ class Parser:
                 0 <= compound.index("(") < compound.index(")") < len(compound):
             compound, status = compound[:compound.index("(")], compound[compound.index("("):]
 
-    @staticmethod
-    def parse_status(data):
+    @classmethod
+    def parse_status(cls, data):
         """Convert () stripped string into status and meta information
 
         :param data: () stripped string
