@@ -13,7 +13,7 @@ class Atom(Element):
         return f"""class <Atom({self.atomic_repr}{self.atomic_number})>"""
 
     def __str__(self):
-        return repr(self)
+        return self.atomic_repr
 
     def __init__(self, no):
         super().__init__(no)
@@ -43,12 +43,18 @@ class Atom(Element):
 
 class Compound:
     def __repr__(self):
-        return f"""class <Compound({", ".join(self.atoms)})>"""
+        return "class <Compound({}{}({}{}))>".format(
+            self.count if self.count > 1 else "",
+            "".join([str(x) for x in self.atoms]),
+            self.status.status,
+            ", " + self.status.meta if self.status.meta else ""
+            )
 
     def __str__(self):
         return repr(self)
 
-    def __init__(self, atoms: List[Atom], status: Status = Status()):
+    def __init__(self, atoms: List[Atom], count: int = 1, status: Status = Status()):
+        self.count = count
         self.atoms = [*atoms]
         self.status = status
 
