@@ -2,9 +2,9 @@
 # Parser
 # Author: Eunhak Lee(@return0927)
 #
-from .status import *
+import re
+from .status import Gas, Liquid, Solid, Aqua
 from .prototype import Atom, Compound, Equation
-from traceback import format_exc
 from .exception import ChemException, ParseError
 
 
@@ -78,4 +78,33 @@ class Parser:
         if not (data[0] == "(" and data[-1] == ")"):
             raise ParseError("Unexpected status string passed", data=data)
 
+        sections = [x.strip() for x in data[1:-1].split(",")]
+        status = Gas
+        metas = []
+        temperature = -1
+        for section in sections:
+            # If specified status of compound
+            if section.lower() in ("g", "l", "s", "aq"):
+                proxy = [
+                    Gas,
+                    Liquid,
+                    Solid,
+                    Aqua
+                    ]
 
+                status = proxy[("g", "l", "s", "aq").index(section)]
+
+            # If specified temperature of compound
+            elif re.compile(r"^\d+[k℃]$").match(section.lower()):
+                if temperature >= 0:
+                    raise ParseError("Temperature was specified multiple times in meta information", data=data)
+                temp, unit = int(section[:-1]), section[-1].lower()
+
+                temperature = temp + (0 if unit == "k" else 273)
+            else:
+                metas.append(section)
+
+        return status(
+            temp=273 if temperature < 0 else temperature,
+            meta=", ".join(metas)
+            )
