@@ -6,7 +6,7 @@ import re
 import logging
 import traceback
 from .status import Gas, Liquid, Solid, Aqua
-from .prototype import Atom, Compound, Equation
+from .prototype import Atom, Compound, Equation, ThermochemicalEquation
 from .exception import ChemException, ParseError
 
 

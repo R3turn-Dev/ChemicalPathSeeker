@@ -68,6 +68,15 @@ class Equation:
         return f"""class <Equation({" + ".join([x.chemical_formula for x in self.before])} -> """ + \
                f"""{" + ".join([x.chemical_formula for x in self.after])})>"""
 
-    def __init__(self, before_compounds: List[Compound], after_compounds: List[Compound]):
-        self.before = [*before_compounds]
-        self.after = [*after_compounds]
+class ThermochemicalEquation(Equation):
+    def __str__(self):
+        return "{} -> {}, ΔH = {}".format(
+            " + ".join([x.chemical_formula for x in self.reactants]),
+            " + ".join([x.chemical_formula for x in self.products]),
+            "{:,}kJ".format(self.enthalpy / 1e3) if abs(self.enthalpy) > 1e3 else
+            "{:,}J".format(self.enthalpy)
+            )
+
+    def __init__(self, reactants: List[Compound], products: List[Compound], enthalpy: int = 0):
+        super().__init__(reactants, products)
+        self.enthalpy = enthalpy
