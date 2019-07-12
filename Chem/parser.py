@@ -3,6 +3,8 @@
 # Author: Eunhak Lee(@return0927)
 #
 import re
+import logging
+import traceback
 from .status import Gas, Liquid, Solid, Aqua
 from .prototype import Atom, Compound, Equation
 from .exception import ChemException, ParseError
@@ -46,6 +48,19 @@ class Parser:
         # Compounds mode
         else:
             compounds = [x.split() for x in data.split("+")]
+            parsed_compounds = []
+
+            for compound in compounds:
+                try:
+                    parsed = cls.parse_compound(compound)
+                    parsed_compounds.append(parsed)
+                except ParseError as ex:
+                    logging.warning(f"Error occured when parsing compound `{compound}`\n" +
+                                    "\n".join(
+                                        "\t" + x for x in traceback.format_exc()
+                                        )
+                                    )
+                    parsed_compounds.append(ex)
 
     @classmethod
     def parse_compound(cls, data):
@@ -54,11 +69,11 @@ class Parser:
         :param data: string of a compound
         :return: class Chem.prototype.Compound
         """
-        count = 1
+        prefix_count = 1
 
         # Starting with count of compound
         if data[0].isnumeric():
-            count = int(data[0])
+            prefix_count = int(data[0])
             data = data[1:]
 
         compound = data
@@ -67,6 +82,23 @@ class Parser:
         if ("(" in compound and ")" in compound) and \
                 0 <= compound.index("(") < compound.index(")") < len(compound):
             compound, status = compound[:compound.index("(")], compound[compound.index("("):]
+
+        # Parse status with Parser.parse_status
+        status = cls.parse_status(status)
+
+        found_atoms = re.compile(r"([A-Z][a-z]*)(\d*)").findall(compound)
+        atoms = []
+
+        for atom, count in found_atoms:
+            count = int(count) if count.isnumeric() else 1
+            for n in range(int(count)):
+                atoms.append(Atom.derive_from_atomic_repr(atom))
+
+        return Compound(
+            atoms,
+            count=prefix_count,
+            status=status
+            )
 
     @classmethod
     def parse_status(cls, data):
