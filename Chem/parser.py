@@ -2,10 +2,10 @@
 # Parser
 # Author: Eunhak Lee(@return0927)
 #
-from Chem.status import *
-from Chem.prototype import Atom, Compound, Equation
+from .status import *
+from .prototype import Atom, Compound, Equation
 from traceback import format_exc
-from Chem.exception import ParseError
+from .exception import ParseError
 
 
 class Parser:
