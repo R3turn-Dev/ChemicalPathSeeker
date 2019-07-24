@@ -50,12 +50,29 @@ class Compound:
 
     @property
     def chemical_formula(self):
-        return "{}{}({}{})".format(
-            self.count if self.count > 1 else "",
-            "".join([str(x) for x in self.atoms]),
-            self.status.status,
-            ", " + self.status.meta if self.status.meta else ""
-            )
+        out = str(self.count) if self.count > 1 else ""
+        heading = ""
+        count = 0
+        i = 0
+
+        while i < len(self.atoms):
+            if heading != self.atoms[i].atomic_repr:
+                if count > 1:
+                    out += str(count)
+
+                heading = self.atoms[i].atomic_repr
+
+                out += heading
+                count = 1
+            else:
+                count += 1
+
+            i += 1
+
+        if count > 1:
+            out += str(count)
+
+        return out
 
     def __init__(self, atoms: List[Atom], count: int = 1, status: Status = Status()):
         self.count = count
