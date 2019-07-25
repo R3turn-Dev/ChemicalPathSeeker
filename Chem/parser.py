@@ -5,6 +5,7 @@
 import re
 import logging
 import traceback
+from typing import Union, List
 from .status import Gas, Liquid, Solid, Aqua
 from .prototype import Atom, Compound, Equation, ThermochemicalEquation
 from .exception import ChemException, ParseError
@@ -33,11 +34,19 @@ class Parser:
             return ex
 
     @classmethod
-    def separate_compounds(cls, data):
+    def separate_compounds(cls, data: str) -> List[Compound] or Union[Equation, ThermochemicalEquation]:
         """
+        Parse the single compound or those in an equation
 
-        :param data: string of compounds or an equation
-        :return: Compound or Equation
+        Parameters
+        ----------
+        data
+            String of compounds or an equation
+
+        Returns
+        -------
+        List[Compound] or Union[Equation, ThermochemicalEquation]
+            compound or an equation that is parsed
         """
         # Equation mode
         if "->" in data:
@@ -78,7 +87,20 @@ class Parser:
             return parsed_compounds
 
     @classmethod
-    def parse_enthalpy(cls, data):
+    def parse_enthalpy(cls, data: str) -> float:
+        """
+        Parse a delta enthalpy string
+
+        Parameters
+        ----------
+        data: str
+            String of a delta enthalpy to parse
+
+        Returns
+        -------
+        float
+            Parsed delta enthalpy value (unit: J)
+        """
         original = data
         # if prefix comma is not yet removed
         if data.startswith(","):
@@ -99,10 +121,18 @@ class Parser:
 
     @classmethod
     def parse_compound(cls, data):
-        """Convert compound string into compound class
+        """
+        Convert compound string into :class:Compound
 
-        :param data: string of a compound
-        :return: class Chem.prototype.Compound
+        Parameters
+        ----------
+        data
+            String of a compound
+
+        Returns
+        -------
+        Compound
+            Parsed compound
         """
         prefix_count = 1
 
@@ -136,11 +166,19 @@ class Parser:
             )
 
     @classmethod
-    def parse_status(cls, data):
-        """Convert () stripped string into status and meta information
+    def parse_status(cls, data: str) -> Union[Gas, Liquid, Solid, Aqua]:
+        """
+        Convert () stripped string into status and meta information
 
-        :param data: () stripped string
-        :return: parsed data as Chem.status.Status
+        Parameters
+        ----------
+        data: str
+            String of status stripped with "(" ,")"
+
+        Returns
+        -------
+        Union[Gas, Liquid, Solid, Aqua]
+            Status of compound
         """
         if not (data[0] == "(" and data[-1] == ")"):
             raise ParseError("Unexpected status string passed", data=data)
@@ -177,7 +215,20 @@ class Parser:
             )
 
     @staticmethod
-    def isnumeric(data):
+    def isnumeric(data: str) -> bool:
+        """
+        Determine the data is numeric
+
+        Parameters
+        ----------
+        data: str
+            String to determine whether is numeric or not
+
+        Returns
+        -------
+        bool
+            Is the data numeric
+        """
         try:
             float(data)
             return True
