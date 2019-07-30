@@ -29,17 +29,31 @@ class Grouper:
         else:
             self.equations.append(equation)
 
-    def estimate(self) -> List[Equation, ThermochemicalEquation]:
+    def estimate(self) -> List[Union[Equation, ThermochemicalEquation]]:
         """
         Estimate all the possible child occurrences of equations.
 
         Returns
         -------
-        List[Equation, ThermochemicalEquation]
+        List[Union[Equation, ThermochemicalEquation]]
             Estimated equations
         """
-        equations = self.equations
+        equations = [x for x in self.equations if isinstance(x, Equation)]
+        equations = [ThermochemicalEquation.from_equation(x) if not hasattr(x, "enthalpy") else x for x in equations]
         if not equations:
             return []
 
-        return []
+        out = []
+        for i in range(len(equations)):
+            for j in range(i + 1, len(equations)):
+                org = len(equations[i].reactants)
+                org += len(equations[i].products)
+                org += len(equations[j].reactants)
+                org += len(equations[j].products)
+
+                for eq in [equations[i] + equations[j], equations[i] - equations[j]]:
+                    l = len(eq.reactants) + len(eq.products)
+                    if l < org:
+                        out.append(eq)
+
+        return out
